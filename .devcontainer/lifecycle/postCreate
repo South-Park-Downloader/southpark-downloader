@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd)
+
+# Change working directory to project root
+echo "Changing working directory..."
+cd $SCRIPT_DIR/../../
+
+# Install project dependencies
+echo "Installing dependencies..."
+npm i
