@@ -1,7 +1,9 @@
 import {existsSync} from 'node:fs';
 import {readFile, writeFile} from 'node:fs/promises';
 import fetch from 'node-fetch';
+import {injectable} from 'inversify';
 
+@injectable()
 export default class Database {
   /**
    * The URL to the database.json file, wille be used to load the current database definition from the repository
@@ -38,12 +40,8 @@ export default class Database {
   static async sync(): Promise<void> {
     await fetch(Database.url)
       .then(response => response.json())
-      .then(json => {
-        if (typeof json === 'string') {
-          writeFile(Database.path, json);
-        }
-
-        throw new Error('Response did not contain valid JSON');
+      .then(data => {
+          writeFile(Database.path, JSON.stringify(data));
       });
   }
 }
