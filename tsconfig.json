@@ -1,6 +1,8 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
+    "module": "ES2020",
+    "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "build",
     "lib": ["es6", "dom"],
@@ -11,5 +13,9 @@
   "include": [
     "src/**/*.ts",
     "test/**/*.ts"
-  ]
+  ],
+  "ts-node": {
+    "esm": true,
+    "files": true
+  }
 }

@@ -1,24 +1,12 @@
-console.log('Try npm run lint/fix!');
+import Database from './south-park/database.js';
+import {TDatabaseSymbol} from './ioc/types.js';
 
-const longString =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut aliquet diam.';
+/* Wrap bootstrap in top-level async to provide await synthax with all module systems */
+(async () => {
+  /* Boot the IoC container */
+  const {default: container} = await import('./ioc/container.js');
 
-const trailing = 'Semicolon';
-
-const why = 'am I tabbed?';
-
-export function doSomeStuff(
-  withThis: string,
-  andThat: string,
-  andThose: string[]
-) {
-  //function on one line
-  if (!andThose.length) {
-    return false;
-  }
-  console.log(withThis);
-  console.log(andThat);
-  console.dir(andThose);
-  return;
-}
-// TODO: more examples
+  /* Bind and load the episode Database */
+  container.bind<Database>(TDatabaseSymbol).to(Database).inSingletonScope();
+  await container.get<Database>(TDatabaseSymbol).load();
+})();
