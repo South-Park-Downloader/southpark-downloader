@@ -25,5 +25,12 @@
         "ghcr.io/devcontainers/features/node:1": {}
     },
     "remoteUser": "vscode",
-    "postCreateCommand": ".devcontainer/lifecycle/postCreate"
+	"postCreateCommand": ".devcontainer/lifecycle/postCreate",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"lacroixdavid1.vscode-format-context-menu"
+			]
+		}
+	}
 }

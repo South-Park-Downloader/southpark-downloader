@@ -1,7 +1,7 @@
-import {existsSync} from 'node:fs';
-import {readFile, writeFile} from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { readFile, writeFile } from 'node:fs/promises';
 import fetch from 'node-fetch';
-import {injectable} from 'inversify';
+import { injectable } from 'inversify';
 
 @injectable()
 export default class Database {
@@ -20,6 +20,10 @@ export default class Database {
    * Holds the loaded data of the database.json file.
    */
   private data: Episode[] = [];
+
+  getEpisodes(): Episode[] {
+    return this.data.filter();
+  }
 
   /**
    * Load the local database.json file and populate the data property.
@@ -41,7 +45,7 @@ export default class Database {
     await fetch(Database.url)
       .then(response => response.json())
       .then(data => {
-          writeFile(Database.path, JSON.stringify(data));
+        writeFile(Database.path, JSON.stringify(data));
       });
   }
 }
