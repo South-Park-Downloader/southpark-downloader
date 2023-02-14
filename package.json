@@ -20,6 +20,7 @@
     "posttest": "npm run lint"
   },
   "dependencies": {
+    "commander": "^10.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "inversify": "^6.0.1",
     "node-fetch": "^3.3.0",

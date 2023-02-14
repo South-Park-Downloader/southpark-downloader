@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 import Database from './south-park/database.js';
 import {TDatabaseSymbol} from './ioc/types.js';
+import { program } from 'commander';
 
 /* Wrap bootstrap in top-level async to provide await synthax with all module systems */
 (async () => {
-  /* Boot the IoC container */
+  /* Boot the InversifyJS IoC container */
   console.debug('Booting IoC container...');
   const {default: container} = await import('./ioc/container.js');
 
@@ -13,4 +14,7 @@ import {TDatabaseSymbol} from './ioc/types.js';
   container.bind<Database>(TDatabaseSymbol).to(Database).inSingletonScope();
   console.log('Load database.json...');
   await container.get<Database>(TDatabaseSymbol).load();
+
+  /* Parse inputs with CommanderJS */
+  program.parse();
 })();
