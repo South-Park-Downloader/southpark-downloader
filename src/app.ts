@@ -5,7 +5,13 @@ import { readdirRecursive } from './util.js';
 import { injectable } from 'inversify';
 
 @injectable()
-class App extends Commander {
+export default class App {
+  private commander: Commander;
+
+  constructor() {
+    this.commander = new Commander();
+  }
+
   async loadCommands(): Promise<void> {
     /* Gather all command files */
     const files = (await readdirRecursive(resolve(__dirname, 'commands')))
@@ -13,14 +19,17 @@ class App extends Commander {
       .filter(path => !path.includes('abstracts'))
       .filter(path => !path.includes('interfaces'))
 
-
+    console.debug('Loaded file paths');
+    
     /* Try to load all files as commands */
     for (const file of files) {
+      console.debug(`Loading file path ${file}`);
+
       /* Dynamically import the TypeScript file */
       const command: Command = await import(file);
 
       /* Create builder fluent and apply the Command's name and description */
-      const builder = this.command(command.name)
+      const builder = this.commander.command(command.name)
         .description(command.description);
       
       /* Apply all Command arguments to the builder */
@@ -34,6 +43,8 @@ class App extends Commander {
       }
     }
   }
-}
 
-export default App;
+  parse(): Commander {
+    return this.commander.parse();
+  }
+}
