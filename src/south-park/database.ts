@@ -22,7 +22,7 @@ export default class Database {
   private data: Episode[] = [];
 
   getEpisodes(): Episode[] {
-    return this.data.filter();
+    return this.data;
   }
 
   /**

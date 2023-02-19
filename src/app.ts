@@ -1,8 +1,10 @@
 import { Command as Commander } from 'commander';
 import Command from './commands/abstracts/command';
 import { resolve } from 'path';
-import { readdirRecursive } from './util';
+import { readdirRecursive } from './util.js';
+import { injectable } from 'inversify';
 
+@injectable()
 class App extends Commander {
   async loadCommands(): Promise<void> {
     /* Gather all command files */

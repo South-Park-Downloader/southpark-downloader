@@ -1,3 +1,6 @@
+import { injectable } from 'inversify';
+
+@injectable()
 export default abstract class Command {
   /**
    * The name of the command.
