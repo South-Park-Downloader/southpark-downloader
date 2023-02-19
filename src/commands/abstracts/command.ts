@@ -12,12 +12,12 @@ export default abstract class Command {
   /**
    * The arguments of the command.
    */
-  public args: { [name: string]: { type: string, description?: string } } = {};
+  public args: { [name: string]: { description?: string, defaultValue?: any } } = {};
 
   /**
    * The options of the command.
    */
-  public options: { [name: string]: { type?: string, description?: string } } = {};
+  public options: { [flags: string]: { description?: string, defaultValue?: any } } = {};
 
   /**
    * Execute the command.
