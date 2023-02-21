@@ -1,7 +1,7 @@
 import { Command as Commander } from 'commander';
 import Command from './commands/abstracts/command';
 import { resolve } from 'path';
-import { readdirRecursive } from './util.js';
+import { readdirRecursive, scriptDir } from './util.js';
 import { injectable } from 'inversify';
 
 @injectable()
@@ -14,7 +14,7 @@ export default class App {
 
   async loadCommands(): Promise<void> {
     /* Gather all command files */
-    const files = (await readdirRecursive(resolve(__dirname, 'commands')))
+    const files = (await readdirRecursive(resolve(scriptDir(import.meta.url), 'commands')))
       .filter(path => path.endsWith('.ts'))
       .filter(path => !path.includes('abstracts'))
       .filter(path => !path.includes('interfaces'))

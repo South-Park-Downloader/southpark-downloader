@@ -44,8 +44,6 @@ export default class Database {
   static async sync(): Promise<void> {
     await fetch(Database.url)
       .then(response => response.json())
-      .then(data => {
-        writeFile(Database.path, JSON.stringify(data));
-      });
+      .then(data => writeFile(Database.path, JSON.stringify(data)));
   }
 }
