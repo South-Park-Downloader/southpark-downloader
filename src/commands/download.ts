@@ -1,4 +1,4 @@
-import Command from './abstracts/command';
+import Command from './abstracts/command.js';
 
 export default class Download extends Command {
 
