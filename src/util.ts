@@ -40,6 +40,20 @@ export function scriptDir(importMetaUrl: string): string {
 }
 
 /**
+ * Returns the directory where the application code does reside.
+ */
+export function appDir(): string {
+  return resolve(scriptDir(import.meta.url), '..');
+}
+
+/**
+ * Returns the directory where the application configuration does reside.
+ */
+export function configDir(): string {
+  return resolve(process.env.HOME || '~', '.spdl');
+}
+
+/**
  * Remove duplicate values from an array by checking the index.
  */
 export function unique<T>(array: T[]): T[] {

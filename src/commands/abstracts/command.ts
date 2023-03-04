@@ -22,6 +22,10 @@ export default abstract class Command {
    */
   public options: { [flags: string]: { description?: string, defaultValue?: any } } = {};
 
+  constructor() {
+    //
+  }
+
   /**
    * Execute the command.
    */

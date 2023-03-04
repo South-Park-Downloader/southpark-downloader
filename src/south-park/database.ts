@@ -1,7 +1,9 @@
-import { existsSync } from 'node:fs';
+import { existsSync, PathLike } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import fetch from 'node-fetch';
 import { injectable } from 'inversify';
+import { resolve } from 'node:path';
+import { configDir } from '../util.js';
 
 @injectable()
 export default class Database {
@@ -10,11 +12,6 @@ export default class Database {
    */
   public static url =
     'https://raw.githubusercontent.com/bumbummen99/southpark-downloader/database/database.json';
-
-  /**
-   * Defines the absolute path to the local copy of the database.json file.
-   */
-  public static path = '/database.json';
 
   /**
    * Holds the loaded data of the database.json file.
@@ -30,11 +27,11 @@ export default class Database {
    * @return Promise<void>
    */
   async load(): Promise<void> {
-    if (!existsSync(Database.path)) {
+    if (!existsSync(Database.databasePath())) {
       await Database.sync();
     }
 
-    this.data = JSON.parse((await readFile(Database.path)).toString());
+    this.data = JSON.parse((await readFile(Database.databasePath())).toString());
   }
 
   /**
@@ -44,6 +41,13 @@ export default class Database {
   static async sync(): Promise<void> {
     await fetch(Database.url)
       .then(response => response.json())
-      .then(data => writeFile(Database.path, JSON.stringify(data)));
+      .then(data => writeFile(Database.databasePath(), JSON.stringify(data)));
+  }
+
+  /**
+   * Defines where the local copy of the database.json relative to the configDir
+   */
+  private static databasePath(): PathLike {
+    return resolve(configDir(), 'database.json');
   }
 }
