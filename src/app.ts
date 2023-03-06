@@ -1,18 +1,71 @@
 import { Command as Commander } from 'commander';
 import Command from './commands/abstracts/command';
 import { resolve } from 'path';
-import { readdirRecursive, scriptDir } from './util.js';
-import { injectable } from 'inversify';
+import { Container, injectable } from 'inversify';
+import { mkdir } from 'fs/promises';
+import { configDir, readdirRecursive, scriptDir } from './util.js';
+import { TAppSymbol, TCommanderSymbol, TDatabaseSymbol } from './ioc/types.js';
+import Database from './south-park/database.js';
 
 @injectable()
 export default class App {
-  private commander: Commander;
+  private container: Container;
 
   constructor() {
-    this.commander = new Commander();
+    this.container = new Container();
   }
 
-  async loadCommands(): Promise<void> {
+  /**
+   * Initializes and starts a new App instance handling register and boot.
+   * @returns The new, booted App instance.
+   */
+  static async make(): Promise<App> {
+    const instance = new App();
+
+    /* Register IoC bindings first */
+    await instance.register();
+
+    /* Load / Initialize IoC bindings */
+    await instance.boot();
+
+    return instance;
+  }
+
+  async register(): Promise<void> {
+    /* Create application directory structure */
+    await mkdir(configDir(), {recursive: true});
+
+    /* Bind this App */
+    this.container.bind<App>(TAppSymbol).toConstantValue(this);
+
+    /* Register the Database */
+    this.container.bind<Database>(TDatabaseSymbol).to(Database).inSingletonScope();
+
+    /* Initialize and bind CommanderJS */
+    this.container.bind<Commander>(TCommanderSymbol).toConstantValue(new Commander());
+  }
+
+  async boot(): Promise<void>  {
+    /* Load the local database file */
+    await this.container.get<Database>(TDatabaseSymbol).load();
+
+    /* Load existing commands */
+    await this.loadCommands();
+  }
+
+  /**
+   * Parse the CLI inputs and run the application / command.
+   * @returns The commander instance
+   */
+  parse(): Commander {
+    return this.container.get<Commander>(TCommanderSymbol).parse();
+  }
+
+  /**
+   * Loads the existing commands and registers them to the
+   * CommanderJS instance bound to this App container.
+   */
+  private async loadCommands(): Promise<void> {
     /* Gather all command files */
     const files = (await readdirRecursive(resolve(scriptDir(import.meta.url), 'commands')))
       .filter(path => path.endsWith('.ts'))
@@ -34,7 +87,7 @@ export default class App {
 
       /* Create builder fluent and apply the Command's name and description */
       console.debug('Configuring command information...');
-      const builder = this.commander.command(command.name)
+      const builder = this.container.get<Commander>(TCommanderSymbol).command(command.name)
         .description(command.description);
       
       /* Apply all Command arguments to the builder */
@@ -49,9 +102,5 @@ export default class App {
         builder.option(flags, description, defaultValue)
       }
     }
-  }
-
-  parse(): Commander {
-    return this.commander.parse();
   }
 }
