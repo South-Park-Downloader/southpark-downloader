@@ -1,6 +1,5 @@
-import { injectable } from 'inversify';
+import container, { Container } from '../../ioc/container.js';
 
-@injectable()
 export default abstract class Command {
   /**
    * The name of the command.
@@ -22,12 +21,20 @@ export default abstract class Command {
    */
   public options: { [flags: string]: { description?: string, defaultValue?: any } } = {};
 
+  /**
+   * Reference to the Container.
+   */
+  protected container: Container;
+
+  /**
+   * Initialize the command and set the container property.
+   */
   constructor() {
-    //
+    this.container = container;
   }
 
   /**
    * Execute the command.
    */
-  public abstract execute(): Promise<number|void>;
+  public abstract execute(): void|Promise<void>;
 }
