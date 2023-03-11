@@ -2,7 +2,14 @@ import { exit } from 'process';
 import Stop from './stop'
 
 export default class Filter {
+  /**
+   * Defines the specific season/episode or left side bounds of this Filter.
+   */
   private left: Stop;
+
+  /**
+   * If set this defines the right side bounds of this Filter as well as turning this filter into a range filter.
+   */
   private right?: Stop;
 
   constructor(input: string) {
@@ -27,13 +34,6 @@ export default class Filter {
         this.right.season = this.left.season;
       }
     }
-  }
-
-  /**
-   * Determines if this filter is specific or a range
-   */
-  public isRange(): boolean {
-    return !!this.right;
   }
 
   /**
@@ -97,5 +97,12 @@ export default class Filter {
       /* verify episode within episode bounds if episode season is same as season bounds */
       (episode.season === this.right.season && typeof this.right.episode !== 'undefined' ? episode.index <= this.right.episode : true)
     )
+  }
+
+  /**
+   * Determines if this filter is specific or a range
+   */
+  private isRange(): boolean {
+    return !! this.right;
   }
 }
