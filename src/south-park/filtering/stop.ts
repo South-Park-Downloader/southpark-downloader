@@ -5,13 +5,13 @@ export default class Stop {
    * The Season this Stop is starting/ending at.
    * In case this is an end Stop, setting this as undefined will inherit the start Stop's season.
    */
-  public readonly season?: number;
+  public season?: number;
 
   /**
    * The Episode this Stop is starting/ending at.
    * This will match ALL episodes of this Stop's season if it is undefined.
    */
-  public readonly episode?: number;
+  public episode?: number;
 
   constructor(input: string) {
     /* Check the input and try to extract the season and / or the episode */
