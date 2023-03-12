@@ -1,5 +1,5 @@
 import { exit } from 'process';
-import Stop from './stop'
+import Stop from './stop.js'
 
 export default class Filter {
   /**
@@ -19,19 +19,14 @@ export default class Filter {
     /* Initialize a new Stop for the left side */
     this.left = new Stop(left);
 
-    /* Make sure that the left side Stop always defines the season */
-    if (typeof this.left.season === 'undefined') {
-      throw new Error(`The left side stop of a filter has to define a Season! The input '${left}' is not valid.`);
-    }
-
     /* Check if a right side Stop is provided with the filter input */
     if (right) {
-      /* Instance a new Stop for the right side */
-      this.right = new Stop(right);
-
-      /* Inherit left side Stop's season in case none is defined for the right side */
-      if (! this.right.season) {
-        this.right.season = this.left.season;
+      /* Check if the right Stop's input defines a Season */
+      if (right.includes('S')) {
+        this.right = new Stop(right);
+      } else {
+        /* Inherit left side Stop's season in case none is defined for the right side */
+        this.right = new Stop(`S${this.left.season}${right}`);
       }
     }
   }
@@ -61,11 +56,6 @@ export default class Filter {
    * is within bounds defined by the left side Stop
    */
   private checkLeftBounds(episode: Episode): boolean {
-    /* This is already handled in the constructor. */
-    if (typeof this.left.season === 'undefined') {
-      exit(1);
-    }
-
     return (
       /* Verify episode within season bounds */
       (episode.season >= this.left.season) &&
@@ -83,11 +73,6 @@ export default class Filter {
     /* Always match episodes if no right bounds is given */
     if (! this.right) {
       return true;
-    }
-
-    /* This is already handled in the constructor. */
-    if (typeof this.right.season === 'undefined') {
-      exit(1);
     }
 
     return (
