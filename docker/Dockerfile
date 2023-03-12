@@ -41,7 +41,7 @@ FROM dependencies as development
 VOLUME /app
 
 # Run the application in dev
-ENTRYPOINT [ "node", "/app/build/index.js" ]
+ENTRYPOINT [ "npx", "ts-node", "src/index.ts" ]
 
 ##############
 # Production #
@@ -52,4 +52,4 @@ FROM dependencies as production
 COPY dist /app
 
 # Run the application in pord
-ENTRYPOINT [ "node", "/app/index.js" ]
+ENTRYPOINT [ "npx", "ts-node", "-T", "src/index.ts" ]

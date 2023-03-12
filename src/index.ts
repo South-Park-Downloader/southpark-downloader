@@ -1,24 +1,22 @@
-console.log('Try npm run lint/fix!');
+import 'core-js/actual/array/group.js';
+import 'reflect-metadata';
+import { mkdir } from 'fs/promises';
+import App from './app.js';
+import container from './ioc/container.js';
+import { TAppSymbol } from './ioc/types.js';
+import { configDir } from './util.js';
 
-const longString =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer ut aliquet diam.';
+/* Wrap bootstrap in top-level async to provide await synthax with all module systems */
+(async () => {
+  /* Create application directory structure */
+  await mkdir(configDir(), {recursive: true});
 
-const trailing = 'Semicolon';
+  /* Initialize the container  and register bindings */
+  await container.register();
 
-const why = 'am I tabbed?';
+  /* Boot the container bindings */
+  await container.boot();
 
-export function doSomeStuff(
-  withThis: string,
-  andThat: string,
-  andThose: string[]
-) {
-  //function on one line
-  if (!andThose.length) {
-    return false;
-  }
-  console.log(withThis);
-  console.log(andThat);
-  console.dir(andThose);
-  return;
-}
-// TODO: more examples
+  /* Parse and run commands */
+  container.get<App>(TAppSymbol).parse();
+})();

@@ -1,11 +1,21 @@
 {
   "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
+    "module": "ES2020",
+    "moduleResolution": "node",
     "rootDir": "./src",
-    "outDir": "build"
+    "outDir": "build",
+    "lib": ["es2019", "es6", "dom"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*.ts",
     "test/**/*.ts"
-  ]
+  ],
+  "ts-node": {
+    "esm": true,
+    "files": true
+  }
 }
