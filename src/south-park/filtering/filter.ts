@@ -32,7 +32,8 @@ export default class Filter {
   }
 
   /**
-   * Match the provided episode against the filter.
+   * Match the provided episode against the filter. In case the 
+   * right side Stop is set this will act as a Range filter.
    */
   public match(episode: Episode): boolean {
     /* Use the correct logic to determine if the episode matches the filter */
@@ -52,8 +53,8 @@ export default class Filter {
   }
 
   /**
-   * Helper method to determine if the given episode 
-   * is within bounds defined by the left side Stop
+   * Helper method to determine if the given episode is 
+   * within bounds defined by the left side Stop
    */
   private checkLeftBounds(episode: Episode): boolean {
     return (
