@@ -19,10 +19,27 @@ export default class Download extends Command {
    * Execute the command.
    */
   public async execute(): Promise<void> {
-    console.log('This is the download command!')
+    console.log('This is the download command!');
+
+    /* Get the episodes from the database */
     const episodes = this.container.get<Database>(TDatabaseSymbol).getEpisodes();
-    const seasons = episodes.map(episode => episode.season)
-      .filter((season, index, seasons) => seasons.indexOf(season) === index);
-    console.log(`Database has ${seasons.length} episodes and ${episodes.length} episodes`);
+
+    /* Group the episodes by their season */
+    const sorted = episodes.group(({season}) => season) as { [season: string]: Episode[] };
+
+    /* Print the episodes that would be downloaded */
+    console.log(`The following episodes will be downloaded:`);
+    for (const [season, episodes] of Object.entries(sorted)) {
+      /* Print the season index */
+      console.log(`Season ${season}:`);
+
+      /* Print the seasons episodes */
+      for (const episode of episodes) {
+        console.log(`${episodes.indexOf(episode) !== episodes.length - 1 ? '├' : '└'} Episode ${episode.index}: ${episode.languages['de'].name}`);
+      }
+
+      /* Print a spacer between each season */
+      console.log('────────────────────');
+    }
   }
 }

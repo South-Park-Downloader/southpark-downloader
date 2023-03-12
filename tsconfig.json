@@ -12,8 +12,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts",
-    "node_modules/youtube-dl-exec/src/index.d.ts"
+    "test/**/*.ts"
   ],
   "ts-node": {
     "esm": true,

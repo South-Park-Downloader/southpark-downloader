@@ -1,5 +1,6 @@
-import { mkdir } from 'fs/promises';
+import 'core-js/actual/array/group.js';
 import 'reflect-metadata';
+import { mkdir } from 'fs/promises';
 import App from './app.js';
 import container from './ioc/container.js';
 import { TAppSymbol } from './ioc/types.js';
