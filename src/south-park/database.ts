@@ -4,6 +4,7 @@ import fetch from 'node-fetch';
 import { injectable } from 'inversify';
 import { resolve } from 'node:path';
 import { configDir } from '../util.js';
+import Filter from './filtering/filter.js';
 
 @injectable()
 export default class Database {
@@ -18,8 +19,13 @@ export default class Database {
    */
   private data: Episode[] = [];
 
-  getEpisodes(): Episode[] {
-    return this.data;
+  getEpisodes(filters: Filter[] = []): Episode[] {
+    /* Apply the filters in case they have been provided */
+    if (filters.length) {
+      return this.data.filter(episode => filters.find(filter => filter.match(episode)));
+    } else {
+      return this.data;
+    }
   }
 
   /**
