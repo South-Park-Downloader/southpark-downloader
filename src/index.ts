@@ -18,5 +18,5 @@ import { configDir } from './util.js';
   await container.boot();
 
   /* Parse and run commands */
-  container.get<App>(TAppSymbol).parse();
+  await container.get<App>(TAppSymbol).parse();
 })();

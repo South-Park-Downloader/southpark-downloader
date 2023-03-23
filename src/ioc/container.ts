@@ -10,7 +10,7 @@ import YouTubeDL from '../types/youtubedl.js';
 export class Container extends InversifyJS {
   async register(): Promise<void> {
     /* Bind CommanderJS instance */
-    this.bind<Commander>(TCommanderSymbol).toConstantValue(new Commander());
+    this.bind<Commander>(TCommanderSymbol).toConstantValue(new Commander('spdl'));
 
     /* Bind App as singleton */
     this.bind<App>(TAppSymbol).to(App).inSingletonScope();

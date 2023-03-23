@@ -1,6 +1,7 @@
 {
   "type": "module",
   "devDependencies": {
+    "@commander-js/extra-typings": "^10.0.3",
     "@types/fluent-ffmpeg": "^2.1.20",
     "@types/node": "^14.11.2",
     "fluent-ffmpeg": "^2.1.2",
