@@ -1,25 +1,17 @@
-declare type ArgumentProperties = {
+declare type Arguments = {
+  [name: string]: ArgumentDefinition
+}
+
+declare type ArgumentDefinition = {
   description?: string, 
   defaultValue?: any 
 }
 
-declare type Argument = {
-  name: string,
-} & ArgumentProperties;
+declare type Options = {
+  [name: string]: OptionDefinition
+}
 
-declare type Arguments = { 
-  [name: string]: ArgumentProperties
-};
-
-declare type OptionProperties = { 
+declare type OptionDefinition = { 
   description?: string, 
   defaultValue?: any 
 };
-
-declare type Option = {
-  name: string,
-} & OptionProperties;
-
-declare type Options = { 
-  [name: string]: OptionProperties
-}

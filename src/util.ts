@@ -71,7 +71,6 @@ export async function filter<T>(array: T[], callback: (element: T) => Promise<bo
   return (await Promise.all(promises)).filter(result => result !== failed) as T[];
 }
 
-export default {
-  readdirRecursive,
-  scriptDir
-};
+export function keys<T>(o: T): Array<keyof T> {
+  return Object.keys(o as object) as Array<keyof T>
+}

@@ -39,11 +39,11 @@ export default class App {
       console.debug(`Importing file ${file}...`);
 
       /* Dynamically import the TypeScript file. */
-      const {default: commandConstructor}: {default: new () => Command} = await import(file);
+      const {default: Constructor}: {default: new () => Command} = await import(file);
 
       /* Initialize and add the command. */
       console.debug(`Import successfull! Instancing command...`);
-      this.commander.addCommand((new commandConstructor()).build());
+      this.commander.addCommand((new Constructor()).build());
     }
   }
 }

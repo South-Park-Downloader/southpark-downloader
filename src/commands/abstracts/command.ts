@@ -1,10 +1,8 @@
 import container, { Container } from '../../ioc/container.js';
-import { OptionValues } from 'commander';
 import Commander from '../../commander.js';
-import App from '../../app.js';
-import { TAppSymbol, TCommanderSymbol } from '../../ioc/types.js';
+import { keys } from '../../util.js';
 
-export default abstract class Command {
+export default abstract class Command<Args extends Arguments = {}, Opts extends Options = {}> {
   /**
    * The name of the command.
    */
@@ -16,14 +14,14 @@ export default abstract class Command {
   public abstract description: string;
 
   /**
-   * The arguments of the command.
+   * The commands arguments definitions.
    */
-  public args: Arguments = {};
+  public args: Args;
 
   /**
-   * The options of the command.
+   * The commands Options definitions.
    */
-  public options: Options = {};
+  public opts: Opts;
 
   /**
    * Reference to the Container.
@@ -33,15 +31,24 @@ export default abstract class Command {
   /**
    * Initialize the command and set the container property.
    */
-  constructor() {
+  constructor(args: Args, opts: Opts) {
+    this.args = args;
+    this.opts = opts;
+
+    /* Set container reference from static export */
     this.container = container;
   }
 
-  public build(): Commander
+  /**
+   * Execute the command.
+   */
+  public abstract execute(args: Record<keyof Args, string>, options: Record<keyof Opts, string | true>): Promise<void>;
+
+  public build(): Commander<string[], Record<keyof Opts, string | true>>
   {
     console.debug(`Instancing command...`);
     /* Initialize and configure basic information */
-    const command = new Commander(this.name);
+    const command = new Commander<string[], Record<keyof Opts, string |true>>(this.name);
     command.description(this.description);
     
     /* Apply all Command arguments to the builder. */
@@ -52,18 +59,27 @@ export default abstract class Command {
 
     /* Apply all Command options to the builder. */
     console.debug('Configuring command options...');
-    for (const [flags, {description, defaultValue}] of Object.entries(this.options)) {
+    for (const [flags, {description, defaultValue}] of Object.entries(this.opts)) {
       command.option(flags, description, defaultValue)
     }
 
-    /* Register the commands execute as it's action. */
-    command.action(() => this.execute(this.container.get<Commander>(TCommanderSymbol).args, this.container.get<Commander>(TCommanderSymbol).opts()));
+    /* Register the commands action. */
+    command.action(() => {
+      /* Map the argument values to an object using their name as property */
+      let mappedArgs = Object.fromEntries(
+        command.processedArgs.map((value, index) => [
+          keys(command.processedArgs)[index], 
+          value
+        ])
+      ) as Record<keyof Args, string>;
+
+      /* Run the executor */
+      this.execute(
+        mappedArgs, 
+        command.opts()
+      );
+    });
 
     return command;
   }
-
-  /**
-   * Execute the command.
-   */
-  public abstract execute(args: string[], options: OptionValues): Promise<void>;
 }
