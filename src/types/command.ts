@@ -13,5 +13,6 @@ declare type Options = {
 
 declare type OptionDefinition = { 
   description?: string, 
-  defaultValue?: any 
+  defaultValue?: any,
+  required?: boolean
 };
