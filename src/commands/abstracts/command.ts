@@ -1,6 +1,7 @@
 import container, { Container } from '../../ioc/container.js';
 import Commander from '../../commander.js';
 import { keys } from '../../util.js';
+import { OptionValues } from 'commander';
 
 export default abstract class Command<Args extends Arguments = {}, Opts extends Options = {}> {
   /**
@@ -42,13 +43,13 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
   /**
    * Execute the command.
    */
-  public abstract execute(args: Record<keyof Args, string>, options: Record<keyof Opts, string | true>): Promise<void>;
+  public abstract execute(args: Record<keyof Args, string>, options: Record<keyof Opts, unknown>): Promise<void>;
 
-  public build(): Commander<string[], Record<keyof Opts, string | true>>
+  public build(): Commander<string[], Record<keyof Opts, unknown>>
   {
     console.debug(`Instancing command...`);
     /* Initialize and configure basic information */
-    const command = new Commander<string[], Record<keyof Opts, string |true>>(this.name);
+    const command = new Commander<string[], Record<keyof Opts, unknown>>(this.name);
     command.description(this.description);
     
     /* Apply all Command arguments to the builder. */
@@ -59,11 +60,16 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
 
     /* Apply all Command options to the builder. */
     console.debug('Configuring command options...');
-    for (const [name, {short, description, defaultValue, required}] of Object.entries(this.opts)) {
+    for (const [name, {description, defaultValue, required, short, type, placeholder}] of Object.entries(this.opts)) {
       /* Build the usage from the Command's name and possible short flag */
       let usage = `--${name}`;
       if (short) {
         usage = `-${short}, ${usage}`
+      }
+
+      /* Append the value to the usage in case this is a value type option */
+      if (type === 'value') {
+        usage = `${usage} <${placeholder ?? name}>`;
       }
 
       if (required) {
@@ -75,6 +81,10 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
 
     /* Register the commands action. */
     command.action(() => {
+      console.debug(`Processed args: ${command.processedArgs}`);
+
+      console.debug(`Processed opts: ${JSON.stringify(command.opts())}`);
+      
       /* Map the argument values to an object using their name as property */
       let mappedArgs = Object.fromEntries(
         command.processedArgs.map((value, index) => [

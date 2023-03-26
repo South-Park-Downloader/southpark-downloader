@@ -18,7 +18,7 @@ export default class App {
    * Parse the CLI inputs and run the application / command.
    */
   parse(): Promise<Commander> {
-    return this.commander.parseAsync();
+    return this.commander.parseAsync(process.argv);
   }
 
   /**
