@@ -59,11 +59,17 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
 
     /* Apply all Command options to the builder. */
     console.debug('Configuring command options...');
-    for (const [flags, {description, defaultValue, required}] of Object.entries(this.opts)) {
+    for (const [name, {short, description, defaultValue, required}] of Object.entries(this.opts)) {
+      /* Build the usage from the Command's name and possible short flag */
+      let usage = `--${name}`;
+      if (short) {
+        usage = `-${short}, ${usage}`
+      }
+
       if (required) {
-        command.requiredOption(flags, description, defaultValue);
+        command.requiredOption(usage, description, defaultValue);
       } else {
-        command.option(flags, description, defaultValue)
+        command.option(usage, description, defaultValue)
       }
     }
 

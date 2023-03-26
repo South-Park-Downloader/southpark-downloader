@@ -9,8 +9,8 @@ export const Options: {
   filters: OptionDefinition
 } = {
   filters: {
+    short: 'f',
     description: 'Filter episodes to be downloaded. Example: "S1E1", "S1E1-E10", "S1E1,S1E2-E10", "S2E3", "S1-S2", ...',
-    required: false
   }
 };
 
