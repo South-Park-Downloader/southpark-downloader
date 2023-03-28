@@ -1,15 +1,17 @@
 import { TDatabaseSymbol } from '../ioc/types.js';
 import Database from '../south-park/database.js';
 import Filter from '../south-park/filtering/filter.js';
+import { ValueOptionDefinition } from '../types/command.js';
 import Command from './abstracts/command.js';
 
 export const Arguments = {};
 
 export const Options: {
-  filter: OptionDefinition
+  filter: ValueOptionDefinition
 } = {
   filter: {
     type: 'value',
+    placeholder: 'filter-strings',
     description: 'Filter episodes to be downloaded. Example: "S1E1", "S1E1-E10", "S1E1,S1E2-E10", "S2E3", "S1-S2", ...',
     short: 'f',
   }
@@ -28,7 +30,7 @@ export default class Download extends Command<typeof Arguments, typeof Options> 
   /**
    * Execute the command.
    */
-  public async execute(args: Record<keyof typeof Arguments, string>, options: Record<keyof typeof Options, unknown>): Promise<void>
+  public async execute(args: Record<keyof typeof Arguments, string>, options: Record<keyof typeof Options, typeof Options[keyof typeof Options] extends ValueOptionDefinition ? string : true>): Promise<void>
   {
     console.log('This is the download command!');
     console.log(`Provided arguments: ${JSON.stringify(Object.keys(args))}`);

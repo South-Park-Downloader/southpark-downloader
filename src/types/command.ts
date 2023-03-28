@@ -1,21 +1,27 @@
-declare type Arguments = {
+export declare type Arguments = {
   [name: string]: ArgumentDefinition
 }
 
-declare type ArgumentDefinition = {
+export declare type ArgumentDefinition = {
   description?: string, 
   defaultValue?: any 
 }
 
-declare type Options = {
-  [name: string]: OptionDefinition
+export declare type Options = {
+  [name: string]: BooleanOptionDefinition | ValueOptionDefinition;
 }
 
-declare type OptionDefinition = { 
-  description?: string,
+export declare type ValueOptionDefinition = {
   defaultValue?: any,
   placeholder?: string,
+} & OptionDefinition<'value'>;
+
+export declare type BooleanOptionDefinition = OptionDefinition<'boolean'>;
+
+export declare type OptionDefinition<T> = {
+  type: T,
+
+  description?: string,
   required?: boolean,
   short?: string,
-  type: 'boolean' | 'value'
 };

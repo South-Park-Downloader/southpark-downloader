@@ -1,7 +1,7 @@
 import container, { Container } from '../../ioc/container.js';
 import Commander from '../../commander.js';
 import { keys } from '../../util.js';
-import { OptionValues } from 'commander';
+import { Arguments, BooleanOptionDefinition, Options, ValueOptionDefinition } from '../../types/command';
 
 export default abstract class Command<Args extends Arguments = {}, Opts extends Options = {}> {
   /**
@@ -43,13 +43,13 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
   /**
    * Execute the command.
    */
-  public abstract execute(args: Record<keyof Args, string>, options: Record<keyof Opts, unknown>): Promise<void>;
+  public abstract execute(args: Record<keyof Args, string>, options: Record<keyof Opts, Opts[keyof Opts] extends ValueOptionDefinition ? string : true>): Promise<void>;
 
-  public build(): Commander<string[], Record<keyof Opts, unknown>>
+  public build(): Commander<string[], Record<keyof Opts, Opts[keyof Opts] extends ValueOptionDefinition ? string : true>>
   {
     console.debug(`Instancing command...`);
     /* Initialize and configure basic information */
-    const command = new Commander<string[], Record<keyof Opts, unknown>>(this.name);
+    const command = new Commander<string[], Record<keyof Opts, Opts[keyof Opts] extends ValueOptionDefinition ? string : true>>(this.name);
     command.description(this.description);
     
     /* Apply all Command arguments to the builder. */
@@ -60,23 +60,28 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
 
     /* Apply all Command options to the builder. */
     console.debug('Configuring command options...');
-    for (const [name, {description, defaultValue, required, short, type, placeholder}] of Object.entries(this.opts)) {
-      /* Build the usage from the Command's name and possible short flag */
-      let usage = `--${name}`;
-      if (short) {
-        usage = `-${short}, ${usage}`
+    for (const [name, definition] of Object.entries(this.opts)) {
+      const {description, required} = definition;
+
+      const args: [
+        Commander<string[], Record<keyof Opts, Opts[keyof Opts] extends ValueOptionDefinition ? string : true>>,
+        boolean,
+        string,
+        string?,
+        any?
+      ] = [
+        command,
+        required ?? false,
+        this.usage(name, definition),
+        description
+      ];
+
+      if (definition.type === 'value') {
+        const {defaultValue} = definition;
+        args.push(defaultValue);
       }
 
-      /* Append the value to the usage in case this is a value type option */
-      if (type === 'value') {
-        usage = `${usage} <${placeholder ?? name}>`;
-      }
-
-      if (required) {
-        command.requiredOption(usage, description, defaultValue);
-      } else {
-        command.option(usage, description, defaultValue)
-      }
+      this.registerOption(...args);
     }
 
     /* Register the commands action. */
@@ -101,5 +106,38 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
     });
 
     return command;
+  }
+
+  /**
+   * Helper to build an options usage string.
+   */
+  private usage(name: string, definition: ValueOptionDefinition | BooleanOptionDefinition): string
+  {
+    const {short} = definition;
+    let usage = `--${name}`;
+    if (short) {
+      usage = `-${short}, ${usage}`
+    }
+    if (definition.type === 'value') {
+      const {placeholder} = definition;
+      usage = `${usage} <${placeholder ?? name}>`;
+    }
+    return usage;
+  }
+
+  
+  private registerOption(
+    command: Commander<string[], Record<keyof Opts, (Opts[keyof Opts] extends ValueOptionDefinition ? string : true) | undefined>>,
+    required: boolean,
+    usage: string,
+    description?: string, 
+    defaultValue?: string
+  ): void
+  {
+    if (required) {
+      command.requiredOption(usage, description, defaultValue);
+    } else {
+      command.option(usage, description, defaultValue)
+    }
   }
 }
