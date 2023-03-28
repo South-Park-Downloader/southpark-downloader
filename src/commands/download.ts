@@ -40,7 +40,7 @@ export default class Download extends Command<typeof Arguments, typeof Options> 
     const filters: Filter[] = [];
     if (options.filter) {
       console.log(`Provided filters string "${options.filter}".`);
-      (options.filter as string).split(',').forEach(filterString => filters.push(new Filter(filterString)));
+      options.filter.split(',').forEach(filterString => filters.push(new Filter(filterString)));
     }
 
     /* Get the episodes from the database */
