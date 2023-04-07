@@ -1,36 +1,36 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/docker-in-docker
 {
-    "name": "South Park Downloader",
-    "build": {
-        "dockerfile": "Dockerfile"
-    },
-    "features": {
-        "ghcr.io/devcontainers/features/common-utils:1": {
-            "installZsh": "true",
-            "upgradePackages": "true",
-            "uid": "1000",
-            "gid": "1000",
-            "installOhMyZsh": "true",
-            "nonFreePackages": "true"
-        },
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {
-            "version": "latest",
-            "dockerDashComposeVersion": "v2",
-            "moby": "true"
-        },
-        "ghcr.io/devcontainers/features/git:1": {},
-        "ghcr.io/devcontainers/features/git-lfs:1": {},
-        "ghcr.io/devcontainers/features/github-cli:1": {},
-        "ghcr.io/devcontainers/features/node:1": {}
-    },
-    "remoteUser": "vscode",
-	"postCreateCommand": ".devcontainer/lifecycle/postCreate",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"lacroixdavid1.vscode-format-context-menu"
-			]
-		}
-	}
+  "name": "South Park Downloader",
+  "build": {
+      "dockerfile": "Dockerfile"
+  },
+  "features": {
+      "ghcr.io/devcontainers/features/common-utils:1": {
+          "installZsh": "true",
+          "upgradePackages": "true",
+          "uid": "1000",
+          "gid": "1000",
+          "installOhMyZsh": "true",
+          "nonFreePackages": "true"
+      },
+      "ghcr.io/devcontainers/features/docker-in-docker:2": {
+          "version": "latest",
+          "dockerDashComposeVersion": "v2",
+          "moby": "true"
+      },
+      "ghcr.io/devcontainers/features/git:1": {},
+      "ghcr.io/devcontainers/features/git-lfs:1": {},
+      "ghcr.io/devcontainers/features/github-cli:1": {},
+      "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": ".devcontainer/lifecycle/postCreate",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "lacroixdavid1.vscode-format-context-menu"
+      ]
+    }
+  }
 }

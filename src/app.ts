@@ -31,18 +31,13 @@ export default class App {
       .filter(path => path.endsWith('.ts'))
       .filter(path => !path.includes('abstracts'))
       .filter(path => !path.includes('interfaces'))
-
-    console.debug(`Loaded ${files.length} command file paths`);
     
     /* Try to load all files as commands. */
     for (const file of files) {
-      console.debug(`Importing file ${file}...`);
-
       /* Dynamically import the TypeScript file. */
       const {default: Constructor}: {default: new () => Command} = await import(file);
 
       /* Initialize and add the command. */
-      console.debug(`Import successfull! Instancing command...`);
       this.commander.addCommand((new Constructor()).build());
     }
   }

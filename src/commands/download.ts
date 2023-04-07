@@ -32,10 +32,6 @@ export default class Download extends Command<typeof Arguments, typeof Options> 
    */
   public async execute(args: Record<keyof typeof Arguments, string>, options: Record<keyof typeof Options, typeof Options[keyof typeof Options] extends ValueOptionDefinition ? string : true>): Promise<void>
   {
-    console.log('This is the download command!');
-    console.log(`Provided arguments: ${JSON.stringify(Object.keys(args))}`);
-    console.log(`Provided options: ${JSON.stringify(Object.keys(options))}`);
-
     /* Initialize filters if provided */
     const filters: Filter[] = [];
     if (options.filter) {

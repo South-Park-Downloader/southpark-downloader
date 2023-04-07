@@ -15,6 +15,7 @@ export default class Filter {
   constructor(input: string) {
     /* Try to split the input into left and right side 'Stop' */
     const [ left, right ] = input.split('-');
+    console.debug(`Initializing new Filter with left "${left}" and right "${right}"`);
 
     /* Initialize a new Stop for the left side */
     this.left = new Stop(left);
@@ -29,6 +30,8 @@ export default class Filter {
         this.right = new Stop(`S${this.left.season}${right}`);
       }
     }
+
+    console.log(`Initialized Filter (${this.isRange() ? 'range' : 'specific'}) with left: '${this.left.format()}'${this.right ? ` and right: '${this.right.format()}'` : '.' }`)
   }
 
   /**

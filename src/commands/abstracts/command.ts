@@ -47,19 +47,16 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
 
   public build(): Commander<string[], Record<keyof Opts, Opts[keyof Opts] extends ValueOptionDefinition ? string : true>>
   {
-    console.debug(`Instancing command...`);
     /* Initialize and configure basic information */
     const command = new Commander<string[], Record<keyof Opts, Opts[keyof Opts] extends ValueOptionDefinition ? string : true>>(this.name);
     command.description(this.description);
     
     /* Apply all Command arguments to the builder. */
-    console.debug('Configuring command arguments...');
     for (const [name, {description, defaultValue}] of Object.entries(this.args)) {
       command.argument(name, description ?? '', defaultValue);
     }
 
     /* Apply all Command options to the builder. */
-    console.debug('Configuring command options...');
     for (const [name, definition] of Object.entries(this.opts)) {
       const {description, required} = definition;
 
@@ -86,9 +83,8 @@ export default abstract class Command<Args extends Arguments = {}, Opts extends 
 
     /* Register the commands action. */
     command.action(() => {
-      console.debug(`Processed args: ${command.processedArgs}`);
-
-      console.debug(`Processed opts: ${JSON.stringify(command.opts())}`);
+      console.debug(`Processed arguments: ${command.processedArgs}`);
+      console.debug(`Processed options: ${JSON.stringify(command.opts())}`);
       
       /* Map the argument values to an object using their name as property */
       let mappedArgs = Object.fromEntries(

@@ -32,9 +32,23 @@ export default class Stop {
       /* input episode */,
       episode
     ] = matches;
+    console.debug(`typeof season ${typeof season}, typeof episode ${episode}`);
 
     /* Set extracted information */
     this.season = parseInt(season);
-    this.episode = parseInt(episode);
+    if (episode !== undefined) {
+      this.episode = parseInt(episode);
+    } else {
+      this.episode = 1;
+    }
+  }
+
+  public format(): string
+  {
+    /* Pad season and episode with leading zero to make sure we awlays have two digits */
+    const season  = this.season.toString().padStart(2, '0');
+    const episode = this.episode.toString().padStart(2, '0');
+
+    return `S${season}E${episode}`;
   }
 }
