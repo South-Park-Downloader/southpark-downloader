@@ -14,7 +14,7 @@ export default class Filter {
 
   constructor(input: string) {
     /* Try to split the input into left and right side 'Stop' */
-    const [ left, right ] = input.split('-');
+    let [ left, right ] = input.split('-');
     console.debug(`Initializing new Filter with left "${left}" and right "${right}"`);
 
     /* Initialize a new Stop for the left side */
@@ -22,12 +22,22 @@ export default class Filter {
 
     /* Check if a right side Stop is provided with the filter input */
     if (right) {
-      /* Check if the right Stop's input defines a Season */
-      if (right.includes('S')) {
-        this.right = new Stop(right);
-      } else {
-        /* Inherit left side Stop's season in case none is defined for the right side */
-        this.right = new Stop(`S${this.left.season}${right}`);
+      /* Inherit left stop season if right stop has none */
+      if (! this.hasSeason(right)) {
+        right = `S${this.left.season}${right}`;
+      }
+
+      /* Select whole season if right stop does not specify episode */
+      if (! this.hasEpisode(right)) {
+        right = `${right}E${Number.MAX_SAFE_INTEGER}`;
+      }
+
+      this.right =  new Stop(right);
+    } else {
+      /* Check if left input does NOT specify the episode */
+      if (! this.hasEpisode(left)) {
+        /* Select all episodes of the season specified in left stop */
+        this.right = new Stop(`S${this.left.season}E${Number.MAX_SAFE_INTEGER}`);
       }
     }
 
@@ -93,5 +103,23 @@ export default class Filter {
    */
   private isRange(): boolean {
     return !! this.right;
+  }
+
+  /**
+   * Fluent helper to determine if the provided
+   * Filter input defines the Season.
+   */
+  private hasSeason(input: string): boolean
+  {
+    return input.includes('S');
+  }
+
+  /**
+   * Fluent helper to determine if the provided
+   * Filter input defines the Episode.
+   */
+  private hasEpisode(input: string): boolean
+  {
+    return input.includes('E');
   }
 }
