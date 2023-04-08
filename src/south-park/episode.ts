@@ -9,7 +9,15 @@ export default class Episode {
   }
 
   /**
-   * This method does download the episode parts using YouTube-DL
+   * Initialize Episode instances from the provided EpisodeData.
+   */
+  static fromData(data: EpisodeData): Episode[]
+  {
+    return data.map((datum: EpisodeDatum) => new this(datum));
+  }
+
+  /**
+   * This method does download the episode parts using YouTube-DL.
    */
   public async download(): Promise<void>
   {
@@ -17,7 +25,7 @@ export default class Episode {
   }
 
   /**
-   * This method does merge/mux the episode parts using FFMPEG
+   * This method does merge/mux the episode parts using FFMPEG.
    */
   public async merge(): Promise<void>
   {
