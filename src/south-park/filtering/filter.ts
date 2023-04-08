@@ -48,7 +48,7 @@ export default class Filter {
    * Match the provided episode against the filter. In case the 
    * right side Stop is set this will act as a Range filter.
    */
-  public match(episode: Episode): boolean {
+  public match(episode: EpisodeDatum): boolean {
     /* Use the correct logic to determine if the episode matches the filter */
     if (this.isRange()) {
       /* Check left and right side bounds as range */
@@ -69,7 +69,7 @@ export default class Filter {
    * Helper method to determine if the given episode is 
    * within bounds defined by the left side Stop
    */
-  private checkLeftBounds(episode: Episode): boolean {
+  private checkLeftBounds(episode: EpisodeDatum): boolean {
     return (
       /* Verify episode within season bounds */
       (episode.season >= this.left.season) &&
@@ -83,7 +83,7 @@ export default class Filter {
    * Helper method to determine if the given episode is within bounds 
    * defined by the right side Stop (in case it has been provided)
    */
-  private checkRightBounds(episode: Episode): boolean {
+  private checkRightBounds(episode: EpisodeDatum): boolean {
     /* Always match episodes if no right bounds is given */
     if (! this.right) {
       return true;

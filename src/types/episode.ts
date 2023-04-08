@@ -1,4 +1,6 @@
-declare type Episode = {
+declare type EpisodeData = EpisodeDatum[];
+
+declare type EpisodeDatum = {
   season: number;
   index: number;
   languages: {

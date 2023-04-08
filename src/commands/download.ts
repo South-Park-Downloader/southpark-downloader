@@ -43,7 +43,7 @@ export default class Download extends Command<typeof Arguments, typeof Options> 
     const episodes = this.container.get<Database>(TDatabaseSymbol).getEpisodes(filters);
 
     /* Group the episodes by their season */
-    const sorted = episodes.group(({season}) => season) as { [season: string]: Episode[] };
+    const sorted = episodes.group(({season}) => season) as { [season: string]: EpisodeData };
 
     /* Print the episodes that would be downloaded */
     console.log(`The following episodes will be downloaded:`);

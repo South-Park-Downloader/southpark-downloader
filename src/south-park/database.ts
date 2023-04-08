@@ -17,9 +17,9 @@ export default class Database {
   /**
    * Holds the loaded data of the database.json file.
    */
-  private data: Episode[] = [];
+  private data: EpisodeData = [];
 
-  getEpisodes(filters: Filter[] = []): Episode[] {
+  getEpisodes(filters: Filter[] = []): EpisodeData {
     /* Apply the filters in case they have been provided */
     if (filters.length) {
       return this.data.filter(episode => filters.find(filter => filter.match(episode)));
