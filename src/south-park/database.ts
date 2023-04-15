@@ -1,10 +1,13 @@
 import {existsSync, PathLike} from 'node:fs';
 import {readFile, writeFile} from 'node:fs/promises';
 import fetch from 'node-fetch';
-import {injectable} from 'inversify';
+import {inject, injectable} from 'inversify';
 import {resolve} from 'node:path';
 import {configDir} from '../util.js';
 import Filter from './filtering/filter.js';
+import Episode from './episode.js';
+import {TEpisodeFactorySymbol} from '../ioc/types.js';
+import episodeFactory from './episode-factory.js';
 
 @injectable()
 export default class Database {
@@ -19,15 +22,29 @@ export default class Database {
    */
   private data: EpisodeData = [];
 
-  getEpisodes(filters: Filter[] = []): EpisodeData {
-    /* Apply the filters in case they have been provided */
+  private factory: ReturnType<typeof episodeFactory>;
+
+  constructor(
+    @inject(TEpisodeFactorySymbol) factory: ReturnType<typeof episodeFactory>
+  ) {
+    this.factory = factory;
+  }
+
+  getEpisodes(filters: Filter[] = []): Episode[] {
+    /* Copy data so we can modify it */
+    let data = this.data;
+
+    /* Apply filters in case any have been provided */
     if (filters.length) {
-      return this.data.filter(episode =>
+      data = data.filter(episode =>
         filters.find(filter => filter.match(episode))
       );
-    } else {
-      return this.data;
     }
+
+    /* Map final data to Episode using EpisodeFactory */
+    return data.map<Episode>(
+      (datum: EpisodeDatum) => this.factory(datum) as Episode
+    );
   }
 
   /**

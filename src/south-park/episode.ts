@@ -1,6 +1,7 @@
 import {inject, injectable} from 'inversify';
 import {TYouTubeDLSymbol} from '../ioc/types';
 import YouTubeDL from '../types/youtubedl';
+import {resolve} from 'node:path';
 
 @injectable()
 export default class Episode {
@@ -25,12 +26,20 @@ export default class Episode {
   /**
    * This method does download the episode parts using YouTube-DL.
    */
-  public async download(): Promise<void> {}
+  public async download(): Promise<void> {
+    await this.youtubeDl.exec(this.url(), {
+      output: resolve('todo'),
+    });
+  }
 
   /**
    * This method does merge/mux the episode parts using FFMPEG.
    */
   public async merge(): Promise<void> {
     // TODO
+  }
+
+  private url(): string {
+    return this.datum.languages['de'].url;
   }
 }
