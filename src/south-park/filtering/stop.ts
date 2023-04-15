@@ -20,17 +20,17 @@ export default class Stop {
     const matches = StopRegex.exec(input);
 
     /* Handle illegal inputs */
-    if (! matches) {
+    if (!matches) {
       throw new InvalidFilterStopError(input);
     }
 
     /* Destruct the result to get the required information while skipping obsolete positions */
     const [
-      /* input */,
-      /* input season */,
-      season,
-      /* input episode */,
-      episode
+      ,
+      ,
+      /* input */ /* input season */ season,
+      ,
+      /* input episode */ episode,
     ] = matches;
     console.debug(`typeof season ${typeof season}, typeof episode ${episode}`);
 
@@ -43,10 +43,9 @@ export default class Stop {
     }
   }
 
-  public format(): string
-  {
+  public format(): string {
     /* Pad season and episode with leading zero to make sure we awlays have two digits */
-    const season  = this.season.toString().padStart(2, '0');
+    const season = this.season.toString().padStart(2, '0');
     const episode = this.episode.toString().padStart(2, '0');
 
     return `S${season}E${episode}`;

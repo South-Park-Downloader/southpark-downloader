@@ -1,5 +1,5 @@
-import { create } from 'youtube-dl-exec';
+import {create} from 'youtube-dl-exec';
 
-declare type YouTubeDL = ReturnType<typeof create>
+declare type YouTubeDL = ReturnType<typeof create>;
 
 export default YouTubeDL;

@@ -1,9 +1,9 @@
-import { existsSync, PathLike } from 'node:fs';
-import { readFile, writeFile } from 'node:fs/promises';
+import {existsSync, PathLike} from 'node:fs';
+import {readFile, writeFile} from 'node:fs/promises';
 import fetch from 'node-fetch';
-import { injectable } from 'inversify';
-import { resolve } from 'node:path';
-import { configDir } from '../util.js';
+import {injectable} from 'inversify';
+import {resolve} from 'node:path';
+import {configDir} from '../util.js';
 import Filter from './filtering/filter.js';
 
 @injectable()
@@ -22,7 +22,9 @@ export default class Database {
   getEpisodes(filters: Filter[] = []): EpisodeData {
     /* Apply the filters in case they have been provided */
     if (filters.length) {
-      return this.data.filter(episode => filters.find(filter => filter.match(episode)));
+      return this.data.filter(episode =>
+        filters.find(filter => filter.match(episode))
+      );
     } else {
       return this.data;
     }
@@ -37,7 +39,9 @@ export default class Database {
       await Database.sync();
     }
 
-    this.data = JSON.parse((await readFile(Database.databasePath())).toString());
+    this.data = JSON.parse(
+      (await readFile(Database.databasePath())).toString()
+    );
   }
 
   /**

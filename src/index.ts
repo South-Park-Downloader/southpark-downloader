@@ -1,10 +1,10 @@
 import 'core-js/actual/array/group.js';
 import 'reflect-metadata';
-import { mkdir } from 'fs/promises';
+import {mkdir} from 'fs/promises';
 import App from './app.js';
 import container from './ioc/container.js';
-import { TAppSymbol } from './ioc/types.js';
-import { configDir } from './util.js';
+import {TAppSymbol} from './ioc/types.js';
+import {configDir} from './util.js';
 
 /* Wrap bootstrap in top-level async to provide await synthax with all module systems */
 (async () => {
