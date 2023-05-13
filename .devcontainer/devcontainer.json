@@ -29,7 +29,8 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "lacroixdavid1.vscode-format-context-menu"
+        "lacroixdavid1.vscode-format-context-menu",
+        "esbenp.prettier-vscode"
       ]
     }
   }

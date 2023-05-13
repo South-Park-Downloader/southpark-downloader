@@ -1,5 +1,12 @@
 {
-    "typescript.preferences.quoteStyle": "single",
-    "editor.tabSize": 2,
-    "editor.detectIndentation": false
+  // TypeScript preferences
+  "typescript.preferences.quoteStyle": "single",
+
+  // Always use two spaces for indentation / tabs
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+
+  // Configure formattiung using GTS / Prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
 }

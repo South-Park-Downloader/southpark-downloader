@@ -5,6 +5,8 @@ import {TFFMPEGSymbol, TYouTubeDLSymbol} from '../core/ioc/types.js';
 import FFMPEG, {FfmpegCommand} from 'fluent-ffmpeg';
 import {create} from 'youtube-dl-exec';
 import YouTubeDL from './types/youtube-dl.js';
+import {resolve} from 'path';
+import Env from '../core/env.js';
 
 export default class ExternalProvider extends Provider {
   async register(
@@ -19,7 +21,7 @@ export default class ExternalProvider extends Provider {
 
     /* Bind YouTubeDL instance */
     bind<YouTubeDL>(TYouTubeDLSymbol).toConstantValue(
-      create('/usr/local/bin/youtube-dl')
+      create(resolve(Env.get('YOUTUBE_DL_BIN', '/usr/local/bin'), 'youtube-dl'))
     );
   }
 
@@ -27,9 +29,13 @@ export default class ExternalProvider extends Provider {
     /* Configure FFMPEG */
     container
       .get<FfmpegCommand>(TFFMPEGSymbol)
-      .setFfmpegPath('/usr/local/bin/ffmpeg');
+      .setFfmpegPath(
+        resolve(Env.get('FFMPEG_BIN', '/usr/local/bin'), 'ffmpeg')
+      );
     container
       .get<FfmpegCommand>(TFFMPEGSymbol)
-      .setFfprobePath('/usr/local/bin/ffprobe');
+      .setFfprobePath(
+        resolve(Env.get('FFMPEG_BIN', '/usr/local/bin'), 'ffprobe')
+      );
   }
 }

@@ -1,7 +1,8 @@
-// Important Imports
+/* Important Imports */
 import 'reflect-metadata';
 
-// Normal imports
+/* Normal imports */
+
 import {mkdir} from 'fs/promises';
 import {configDir} from './core/util.js';
 import container from './core/ioc/container.js';

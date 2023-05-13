@@ -1,12 +1,9 @@
 import {Container as InversifyJS} from 'inversify';
-import {TContainerSymbol, TProviderManagerSymbol} from './types.js';
+import {TProviderManagerSymbol} from './types.js';
 import ProviderManager from './provider-manager.js';
 
 export class Container extends InversifyJS {
   async register(): Promise<void> {
-    /* Bind the Container itself first for conveniance */
-    this.bind<Container>(TContainerSymbol).toConstantValue(this);
-
     /* Bind the ProviderManager as the core manager of modular IoC */
     this.bind<ProviderManager>(TProviderManagerSymbol)
       .to(ProviderManager)

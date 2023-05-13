@@ -2,5 +2,14 @@
 node_modules
 package-lock.json
 
-# Application
+###############
+# Application #
+###############
+# Configuration / DotEnv
+.env*
+
+# Distribution
 build
+
+# Always include .example files
+!*.example

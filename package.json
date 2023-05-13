@@ -24,6 +24,7 @@
     "@supercharge/promise-pool": "^2.4.0",
     "commander": "^10.0.0",
     "core-js": "^3.29.0",
+    "dotenv": "^16.0.3",
     "fluent-ffmpeg": "^2.1.2",
     "inversify": "^6.0.1",
     "node-fetch": "^3.3.0",
