@@ -26,7 +26,7 @@ export default class App {
   async loadCommands(): Promise<void> {
     /* Gather all command files */
     const files = (
-      await readdirRecursive(resolve(scriptDir(import.meta.url), 'commands'))
+      await readdirRecursive(resolve(scriptDir(import.meta.url), '../commands'))
     )
       .filter(path => path.endsWith('.ts'))
       .filter(path => !path.includes('abstracts'))
