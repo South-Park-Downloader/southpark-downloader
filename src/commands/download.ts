@@ -1,8 +1,8 @@
-import {TDatabaseSymbol} from '../ioc/types.js';
+import {TDatabaseSymbol} from '../core/ioc/types.js';
 import Database from '../south-park/database.js';
 import Filter from '../south-park/filtering/filter.js';
-import {ValueOptionDefinition} from '../types/command.js';
-import Command from './abstracts/command.js';
+import {ValueOptionDefinition} from '../core/types/cli.js';
+import Command from '../core/commands/command.js';
 
 export const Arguments = {};
 
@@ -57,7 +57,7 @@ export default class Download extends Command<
       .getEpisodes(filters);
 
     /* Group the episodes by their season */
-    const sorted = episodes.group(({season}) => season) as {
+    const sorted = episodes.group(({datum: {season}}) => season) as {
       [season: string]: EpisodeData;
     };
 

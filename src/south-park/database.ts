@@ -3,10 +3,10 @@ import {readFile, writeFile} from 'node:fs/promises';
 import fetch from 'node-fetch';
 import {inject, injectable} from 'inversify';
 import {resolve} from 'node:path';
-import {configDir} from '../util.js';
+import {configDir} from '../core/util.js';
 import Filter from './filtering/filter.js';
 import Episode from './episode.js';
-import {TEpisodeFactorySymbol} from '../ioc/types.js';
+import {TEpisodeFactorySymbol} from '../core/ioc/types.js';
 import episodeFactory from './episode-factory.js';
 
 @injectable()

@@ -1,6 +1,6 @@
 import {inject, injectable} from 'inversify';
-import {TYouTubeDLSymbol} from '../ioc/types';
-import YouTubeDL from '../types/youtubedl';
+import {TYouTubeDLSymbol} from '../core/ioc/types.js';
+import YouTubeDL from './types/youtubedl.js';
 import {resolve} from 'node:path';
 
 @injectable()

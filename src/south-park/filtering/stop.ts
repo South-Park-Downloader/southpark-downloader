@@ -1,4 +1,4 @@
-import InvalidFilterStopError from '../../errors/InvalidFilterStopError.js';
+import InvalidFilterStopError from './errors/InvalidFilterStopError.js';
 
 export const StopRegex = /^(S(\d*))?(E(\d*))?$/;
 

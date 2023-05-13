@@ -1,7 +1,7 @@
 import {interfaces} from 'inversify';
-import Episode from './episode';
-import YouTubeDL from '../types/youtubedl';
-import {TYouTubeDLSymbol} from '../ioc/types';
+import Episode from './episode.js';
+import YouTubeDL from './types/youtubedl.js';
+import {TYouTubeDLSymbol} from '../core/ioc/types.js';
 
 const episodeFactory: interfaces.FactoryCreator<Episode, [EpisodeDatum]> = (
   context: interfaces.Context

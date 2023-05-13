@@ -1,4 +1,4 @@
-import Command from './commands/abstracts/command';
+import Command from './commands/command.js';
 import {resolve} from 'path';
 import {inject, injectable} from 'inversify';
 import Commander from './commander.js';

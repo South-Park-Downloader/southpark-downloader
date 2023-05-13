@@ -1,12 +1,12 @@
-import container, {Container} from '../../ioc/container.js';
-import Commander from '../../commander.js';
-import {keys} from '../../util.js';
+import container, {Container} from '../../core/ioc/container.js';
+import Commander from '../commander.js';
+import {keys} from '../util.js';
 import {
   Arguments,
   BooleanOptionDefinition,
   Options,
   ValueOptionDefinition,
-} from '../../types/command';
+} from '../types/cli.js';
 
 export default abstract class Command<
   Args extends Arguments = {},
