@@ -4,7 +4,7 @@ import Provider from '../core/ioc/provider.js';
 import {TFFMPEGSymbol, TYouTubeDLSymbol} from '../core/ioc/types.js';
 import FFMPEG, {FfmpegCommand} from 'fluent-ffmpeg';
 import {create} from 'youtube-dl-exec';
-import YouTubeDL from '../south-park/types/youtubedl.js';
+import YouTubeDL from './types/youtube-dl.js';
 
 export default class ExternalProvider extends Provider {
   async register(
