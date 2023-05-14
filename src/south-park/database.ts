@@ -6,8 +6,8 @@ import {resolve} from 'node:path';
 import {configDir} from '../core/util.js';
 import Filter from './filtering/filter.js';
 import Episode from './episode.js';
-import {TEpisodeFactorySymbol} from '../core/ioc/types.js';
 import episodeFactory from './episode-factory.js';
+import EpisodeFactorySymbol from './symbols/EpisodeFactorySymbol.js';
 
 @injectable()
 export default class Database {
@@ -25,7 +25,7 @@ export default class Database {
   private factory: ReturnType<typeof episodeFactory>;
 
   constructor(
-    @inject(TEpisodeFactorySymbol) factory: ReturnType<typeof episodeFactory>
+    @inject(EpisodeFactorySymbol) factory: ReturnType<typeof episodeFactory>
   ) {
     this.factory = factory;
   }

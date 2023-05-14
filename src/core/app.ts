@@ -3,13 +3,13 @@ import {resolve} from 'path';
 import {inject, injectable} from 'inversify';
 import Commander from './commander.js';
 import {readdirRecursive, scriptDir} from './util.js';
-import {TCommanderSymbol} from './ioc/types.js';
+import CommanderSymbol from './symbols/CommanderSymbol.js';
 
 @injectable()
 export default class App {
   private commander: Commander;
 
-  constructor(@inject(TCommanderSymbol) commander: Commander) {
+  constructor(@inject(CommanderSymbol) commander: Commander) {
     this.commander = commander;
   }
   /**

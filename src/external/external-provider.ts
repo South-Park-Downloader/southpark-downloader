@@ -1,12 +1,13 @@
 import {interfaces} from 'inversify';
 import {Container} from '../core/ioc/container.js';
 import Provider from '../core/ioc/provider.js';
-import {TFFMPEGSymbol, TYouTubeDLSymbol} from '../core/ioc/types.js';
 import FFMPEG, {FfmpegCommand} from 'fluent-ffmpeg';
 import {create} from 'youtube-dl-exec';
 import YouTubeDL from './types/youtube-dl.js';
 import {resolve} from 'path';
 import Env from '../core/env.js';
+import FFMPEGSymbol from './symbols/FFMPEGSymbol.js';
+import YouTubeDLSymbol from './symbols/YouTubeDLSymbol.js';
 
 export default class ExternalProvider extends Provider {
   async register(
@@ -17,10 +18,10 @@ export default class ExternalProvider extends Provider {
     unbindAsync: interfaces.UnbindAsync
   ): Promise<void> {
     /* Bind FFMPEG instance */
-    bind<FfmpegCommand>(TFFMPEGSymbol).toConstantValue(FFMPEG());
+    bind<FfmpegCommand>(FFMPEGSymbol).toConstantValue(FFMPEG());
 
     /* Bind YouTubeDL instance */
-    bind<YouTubeDL>(TYouTubeDLSymbol).toConstantValue(
+    bind<YouTubeDL>(YouTubeDLSymbol).toConstantValue(
       create(resolve(Env.get('YOUTUBE_DL_BIN', '/usr/local/bin'), 'youtube-dl'))
     );
   }
@@ -28,12 +29,12 @@ export default class ExternalProvider extends Provider {
   async boot(container: Container): Promise<void> {
     /* Configure FFMPEG */
     container
-      .get<FfmpegCommand>(TFFMPEGSymbol)
+      .get<FfmpegCommand>(FFMPEGSymbol)
       .setFfmpegPath(
         resolve(Env.get('FFMPEG_BIN', '/usr/local/bin'), 'ffmpeg')
       );
     container
-      .get<FfmpegCommand>(TFFMPEGSymbol)
+      .get<FfmpegCommand>(FFMPEGSymbol)
       .setFfprobePath(
         resolve(Env.get('FFMPEG_BIN', '/usr/local/bin'), 'ffprobe')
       );
