@@ -2,9 +2,9 @@ import PromisePool, {
   Stoppable,
   UsesConcurrency,
 } from '@supercharge/promise-pool/dist';
-import Episode from '../episode';
-import DownloadError from './download-error';
-import DownloadResult from './download-result';
+import Episode from '../episode.js';
+import DownloadError from './download-error.js';
+import DownloadResult from './download-result.js';
 
 export default class Downloader {
   constructor(public parallel: number = 4) {}

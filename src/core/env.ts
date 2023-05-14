@@ -1,5 +1,5 @@
 import {DotenvParseOutput, parse} from 'dotenv';
-import {readFileSync} from 'fs';
+import {existsSync, readFileSync} from 'fs';
 import {resolve} from 'path';
 import {cwd} from 'process';
 
@@ -23,6 +23,9 @@ class EnvImplementation<T extends DotenvParseOutput = DotenvParseOutput> {
   }
 }
 
+/* Define the path to the .env file */
+const envPath = resolve(cwd(), '.env');
+
 /* Initialize the singleton the old fassioned way */
 const Env = new EnvImplementation(
   /* Define schema and parse using DotEnv */
@@ -35,7 +38,7 @@ const Env = new EnvImplementation(
 
     /* FFMPEG configuration */
     FFMPEG_BIN: string;
-  }>(readFileSync(resolve(cwd(), '.env')))
+  }>(existsSync(envPath) ? readFileSync(envPath) : '')
 );
 
 /* Export the singleton instance */

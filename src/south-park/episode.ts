@@ -1,7 +1,7 @@
 import {inject, injectable} from 'inversify';
-import {TYouTubeDLSymbol} from '../core/ioc/types.js';
-import YouTubeDL from './types/youtubedl.js';
 import {resolve} from 'node:path';
+import YouTubeDLSymbol from '../external/symbols/YouTubeDLSymbol.js';
+import YouTubeDL from '../external/types/youtube-dl.js';
 
 @injectable()
 export default class Episode {
@@ -17,7 +17,7 @@ export default class Episode {
 
   constructor(
     datum: EpisodeDatum,
-    @inject(TYouTubeDLSymbol) youtubeDl: YouTubeDL
+    @inject(YouTubeDLSymbol) youtubeDl: YouTubeDL
   ) {
     this.datum = datum;
     this.youtubeDl = youtubeDl;

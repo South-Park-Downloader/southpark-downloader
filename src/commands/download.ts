@@ -1,8 +1,8 @@
-import {TDatabaseSymbol} from '../core/ioc/types.js';
 import Database from '../south-park/database.js';
 import Filter from '../south-park/filtering/filter.js';
 import {ValueOptionDefinition} from '../core/types/cli.js';
 import Command from '../core/commands/command.js';
+import DatabaseSymbol from '../south-park/symbols/DatabaseSymbol.js';
 
 export const Arguments = {};
 
@@ -53,7 +53,7 @@ export default class Download extends Command<
 
     /* Get the episodes from the database */
     const episodes = this.container
-      .get<Database>(TDatabaseSymbol)
+      .get<Database>(DatabaseSymbol)
       .getEpisodes(filters);
 
     /* Group the episodes by their season */
