@@ -4,7 +4,7 @@
 FROM node:lts-alpine as base
 
 # Install required software using the package manager
-RUN apk add --no-cache curl
+RUN apk add --no-cache curl python3
 
 ####################################
 # Dependencies / External software #
@@ -14,7 +14,8 @@ FROM base as dependencies
 # Install latest version of YouTube-DL(P)
 RUN curl -L \
     https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp \
-    --output /usr/local/bin/youtube-dl
+    --output /usr/local/bin/youtube-dl && \
+    chmod +x /usr/local/bin/youtube-dl
 
 # Install custom FFMPEG build for YouTube-DL(P)
 RUN mkdir ffmpeg-download && \

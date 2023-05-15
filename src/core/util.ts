@@ -2,6 +2,7 @@ import {BaseEncodingOptions, PathLike} from 'fs';
 import {lstat, readdir} from 'fs/promises';
 import {dirname, resolve} from 'path';
 import {fileURLToPath} from 'url';
+import Env from './env.js';
 
 /* Declare default readDir options type as dedicated type so we can easily refer to it */
 declare type ReaddirOptions =
@@ -59,6 +60,13 @@ export function scriptDir(importMetaUrl: string): string {
  */
 export function appDir(): string {
   return resolve(scriptDir(import.meta.url), '..');
+}
+
+/**
+ * Returns the directory where the episodes will be downloaded and processed.
+ */
+export function dataDir(): string {
+  return resolve(Env.get('SOUTHPARK_DL_DATA_DIR', '~/.spdl'));
 }
 
 /**

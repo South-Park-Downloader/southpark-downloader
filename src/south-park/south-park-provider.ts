@@ -5,6 +5,8 @@ import Database from './database.js';
 import episodeFactory from './episode-factory.js';
 import DatabaseSymbol from './symbols/DatabaseSymbol.js';
 import EpisodeFactorySymbol from './symbols/EpisodeFactorySymbol.js';
+import Downloader from './download/downloader.js';
+import DownloaderSymbol from './symbols/DownloaderSymbol.js';
 
 export default class SouthParkProvider extends Provider {
   async register(
@@ -14,8 +16,11 @@ export default class SouthParkProvider extends Provider {
     rebind: interfaces.Rebind,
     unbindAsync: interfaces.UnbindAsync
   ): Promise<void> {
-    /* Bind Database as singleton */
+    /* Register Database as singleton */
     bind<Database>(DatabaseSymbol).to(Database).inSingletonScope();
+
+    /* Registe Downloader */
+    bind<Downloader>(DownloaderSymbol).to(Downloader);
 
     /* Register Episode factory */
     bind<ReturnType<typeof episodeFactory>>(EpisodeFactorySymbol).toFactory(

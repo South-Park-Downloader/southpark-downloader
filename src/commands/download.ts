@@ -3,6 +3,9 @@ import Filter from '../south-park/filtering/filter.js';
 import {ValueOptionDefinition} from '../core/types/cli.js';
 import Command from '../core/commands/command.js';
 import DatabaseSymbol from '../south-park/symbols/DatabaseSymbol.js';
+import Downloader from '../south-park/download/downloader.js';
+import Episode from '../south-park/episode.js';
+import DownloaderSymbol from '../south-park/symbols/DownloaderSymbol.js';
 
 export const Arguments = {};
 
@@ -58,7 +61,7 @@ export default class Download extends Command<
 
     /* Group the episodes by their season */
     const sorted = episodes.group(({datum: {season}}) => season) as {
-      [season: string]: EpisodeData;
+      [season: string]: Episode[];
     };
 
     /* Print the episodes that would be downloaded */
@@ -72,12 +75,17 @@ export default class Download extends Command<
         console.log(
           `${
             episodes.indexOf(episode) !== episodes.length - 1 ? '├' : '└'
-          } Episode ${episode.index}: ${episode.languages['de'].name}`
+          } Episode ${episode.datum.index}: ${
+            episode.datum.languages['de'].name
+          }`
         );
       }
 
       /* Print a spacer between each season */
       console.log('────────────────────');
     }
+
+    /* Actually download the episodes */
+    this.container.get<Downloader>(DownloaderSymbol).process(episodes);
   }
 }
