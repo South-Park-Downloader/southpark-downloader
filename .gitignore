@@ -11,5 +11,8 @@ package-lock.json
 # Distribution
 build
 
+# DevContainer
+.spdl
+
 # Always include .example files
 !*.example

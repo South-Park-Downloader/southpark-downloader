@@ -5,6 +5,12 @@
   "build": {
     "dockerfile": "docker/Dockerfile"
   },
+  "remoteUser": "vscode",
+  "containerEnv": {
+    "SOUTHPARK_DL_DATA_DIR": "${variable:containerWorkspaceFolder}/.spdl/data",
+    "YOUTUBE_DL_BIN": "/usr/local/bin/youtube-dl",
+    "FFMPEG_DIR": "/usr/local/bin"
+  },
   "features": {
     "ghcr.io/devcontainers/features/common-utils:1": {
       "installZsh": "true",
@@ -23,8 +29,6 @@
       "moby": "true"
     }
   },
-  "remoteUser": "vscode",
-  "postCreateCommand": ".devcontainer/lifecycle/postCreate",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -32,5 +36,6 @@
         "esbenp.prettier-vscode"
       ]
     }
-  }
+  },
+  "postCreateCommand": ".devcontainer/lifecycle/postCreate"
 }

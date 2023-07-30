@@ -52,5 +52,5 @@ FROM dependencies as production
 # Add the local build
 COPY dist /app
 
-# Run the application in pord
+# Run the application in prod
 ENTRYPOINT [ "npx", "ts-node", "-T", "src/index.ts" ]

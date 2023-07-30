@@ -22,7 +22,7 @@ export default class ExternalProvider extends Provider {
 
     /* Bind YouTubeDL instance */
     bind<YouTubeDL>(YouTubeDLSymbol).toConstantValue(
-      create(resolve(Env.get('YOUTUBE_DL_BIN', '/usr/local/bin'), 'youtube-dl'))
+      create(resolve(Env.get('YOUTUBE_DL_BIN', '/usr/local/bin/youtube-dl')))
     );
   }
 
@@ -31,12 +31,12 @@ export default class ExternalProvider extends Provider {
     container
       .get<FfmpegCommand>(FFMPEGSymbol)
       .setFfmpegPath(
-        resolve(Env.get('FFMPEG_BIN', '/usr/local/bin'), 'ffmpeg')
+        resolve(Env.get('FFMPEG_DIR', '/usr/local/bin'), 'ffmpeg')
       );
     container
       .get<FfmpegCommand>(FFMPEGSymbol)
       .setFfprobePath(
-        resolve(Env.get('FFMPEG_BIN', '/usr/local/bin'), 'ffprobe')
+        resolve(Env.get('FFMPEG_DIR', '/usr/local/bin'), 'ffprobe')
       );
   }
 }

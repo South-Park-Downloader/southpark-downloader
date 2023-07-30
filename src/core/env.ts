@@ -39,7 +39,7 @@ const Env = new EnvImplementation(
     YOUTUBE_DL_BIN: string;
 
     /* FFMPEG configuration */
-    FFMPEG_BIN: string;
+    FFMPEG_DIR: string;
   }>(existsSync(envPath) ? readFileSync(envPath) : '')
 );
 
