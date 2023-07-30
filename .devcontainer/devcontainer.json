@@ -3,7 +3,7 @@
 {
   "name": "South Park Downloader",
   "build": {
-      "dockerfile": "Dockerfile"
+      "dockerfile": "docker/Dockerfile"
   },
   "features": {
       "ghcr.io/devcontainers/features/common-utils:1": {
