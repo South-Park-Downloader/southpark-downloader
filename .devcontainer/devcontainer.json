@@ -7,7 +7,7 @@
   },
   "remoteUser": "vscode",
   "containerEnv": {
-    "SOUTHPARK_DL_DATA_DIR": "${variable:containerWorkspaceFolder}/.spdl/data",
+    "SOUTHPARK_DL_DATA_DIR": "${containerWorkspaceFolder}/.spdl/data",
     "YOUTUBE_DL_BIN": "/usr/local/bin/youtube-dl",
     "FFMPEG_DIR": "/usr/local/bin"
   },
