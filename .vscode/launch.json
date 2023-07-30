@@ -5,13 +5,38 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "TypeScript (ts-node)",
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/src/index.ts",
-      "preLaunchTask": "tsc: build - tsconfig.json",
-      "outFiles": ["${workspaceFolder}/build/**/*.js"]
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        // Ensure that Node always checks the validates file
+        "--nolazy",
+        // Use ts-node/esm to allow for ES modules & TypeScript at runtime
+        "--loader=ts-node/esm",
+        // Use node module resolution
+        "--experimental-specifier-resolution=node"
+      ],
+      "args": [
+        // Launch the app, this is our first 'argument'
+        "${workspaceFolder}/src/index.ts",
+        // Run the command from input
+        "${input:command}"
+      ],
+      // Ensure that we run at the root of the project
+      "cwd": "${workspaceRoot}",
+      "internalConsoleOptions": "openOnSessionStart",
+      // Prevent the debugger from getting lost in 'the void'
+      "skipFiles": ["<node_internals>/**", "node_modules/**"],
+      "outputCapture": "std"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "command",
+      "type": "promptString",
+      "description": "Please enter the command:",
+      "default": "--help"
     }
   ]
 }
