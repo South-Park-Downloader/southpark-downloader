@@ -3,26 +3,25 @@
 {
   "name": "South Park Downloader",
   "build": {
-      "dockerfile": "docker/Dockerfile"
+    "dockerfile": "docker/Dockerfile"
   },
   "features": {
-      "ghcr.io/devcontainers/features/common-utils:1": {
-          "installZsh": "true",
-          "upgradePackages": "true",
-          "uid": "1000",
-          "gid": "1000",
-          "installOhMyZsh": "true",
-          "nonFreePackages": "true"
-      },
-      "ghcr.io/devcontainers/features/docker-in-docker:2": {
-          "version": "latest",
-          "dockerDashComposeVersion": "v2",
-          "moby": "true"
-      },
-      "ghcr.io/devcontainers/features/git:1": {},
-      "ghcr.io/devcontainers/features/git-lfs:1": {},
-      "ghcr.io/devcontainers/features/github-cli:1": {},
-      "ghcr.io/devcontainers/features/node:1": {}
+    "ghcr.io/devcontainers/features/common-utils:1": {
+      "installZsh": "true",
+      "upgradePackages": "true",
+      "uid": "1000",
+      "gid": "1000",
+      "installOhMyZsh": "true",
+      "nonFreePackages": "true"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/git-lfs:1": {},
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "dockerDashComposeVersion": "v2",
+      "moby": "true"
+    }
   },
   "remoteUser": "vscode",
   "postCreateCommand": ".devcontainer/lifecycle/postCreate",
