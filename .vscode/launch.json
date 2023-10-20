@@ -8,7 +8,9 @@
       "name": "TypeScript (ts-node)",
       "type": "node",
       "request": "launch",
+      // Run with Node.JS directly
       "runtimeExecutable": "node",
+      // Configure the Node.JS runtime as required
       "runtimeArgs": [
         // Ensure that Node always checks the validates file
         "--nolazy",
@@ -17,15 +19,20 @@
         // Use node module resolution
         "--experimental-specifier-resolution=node"
       ],
-      "args": [
-        // Launch the app, this is our first 'argument'
-        "${workspaceFolder}/src/index.ts",
-        // Run the command from input
-        "${input:command}"
-      ],
+      // Define the path to the main file of the software
+      "program": "${workspaceFolder}/src/index.ts",
+      // Use the integrated terminal in order to allow the passed command input
+      // to include spaces while NOT escaping them automatically (arguments).
+      "console": "integratedTerminal",
+      // Append the user input as command & arguments
+      "args": "${input:command}",
       // Ensure that we run at the root of the project
       "cwd": "${workspaceRoot}",
-      "internalConsoleOptions": "openOnSessionStart",
+      "env": {
+        // Ensure the software does know it is in a development environment
+        "DEBUG": "true"
+      },
+      //"internalConsoleOptions": "openOnSessionStart",
       // Prevent the debugger from getting lost in 'the void'
       "skipFiles": ["<node_internals>/**", "node_modules/**"],
       "outputCapture": "std"
