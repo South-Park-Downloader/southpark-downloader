@@ -3,6 +3,22 @@ import {existsSync, readFileSync} from 'fs';
 import {resolve} from 'path';
 import {cwd} from 'process';
 
+type EnvDefinition = {
+  /* Global configuration */
+  DEBUG?: 'true' | 'false';
+
+  /* SouthParkDL configuration */
+  SOUTHPARK_DL_NAME: string;
+  SOUTHPARK_DL_DEFAULT_LANGUAGE: 'de' | 'en';
+  SOUTHPARK_DL_DATA_DIR: string;
+
+  /* YouTubeDL configuration */
+  YOUTUBE_DL_BIN: string;
+
+  /* FFMPEG configuration */
+  FFMPEG_DIR: string;
+} & DotenvParseOutput;
+
 /* Do not export the implementation in order to prevent it being constructed */
 class EnvImplementation<T extends DotenvParseOutput = DotenvParseOutput> {
   constructor(private output: T) {}
@@ -29,18 +45,7 @@ const envPath = resolve(cwd(), '.env');
 /* Initialize the singleton the old fassioned way */
 const Env = new EnvImplementation(
   /* Define schema and parse using DotEnv */
-  parse<{
-    /* SouthParkDL configuration */
-    SOUTHPARK_DL_NAME: string;
-    SOUTHPARK_DL_DEFAULT_LANGUAGE: 'de' | 'en';
-    SOUTHPARK_DL_DATA_DIR: string;
-
-    /* YouTubeDL configuration */
-    YOUTUBE_DL_BIN: string;
-
-    /* FFMPEG configuration */
-    FFMPEG_DIR: string;
-  }>(existsSync(envPath) ? readFileSync(envPath) : '')
+  parse<EnvDefinition>(existsSync(envPath) ? readFileSync(envPath) : '')
 );
 
 /* Export the singleton instance */

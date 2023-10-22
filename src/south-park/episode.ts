@@ -5,6 +5,7 @@ import YouTubeDL from '../external/types/youtube-dl.js';
 import {dataDir} from '../core/util.js';
 import Env from '../core/env.js';
 import {stderr, stdout} from 'node:process';
+import YTFlags from '../external/types/yt-flags.js';
 
 @injectable()
 export default class Episode {
@@ -31,12 +32,20 @@ export default class Episode {
    */
   public async download(): Promise<void> {
     /* Build the path where YouTube-DL can store it's raw output */
-    const targetDirectory = resolve(this.directory(), 'download');
+    const targetDirectory = resolve(this.directory(), `${this.name()}.mkv`);
+
+    const flags: YTFlags = {
+      output: targetDirectory,
+    };
+
+    const val = Env.get('DEBUG');
+    if (val === 'true') {
+      console.log('DEBUG detected');
+      flags.verbose = true;
+    }
 
     /* Process the URL using YouTube-DL and download the episodes parts / acts */
-    const process = this.youtubeDl.exec(this.url(), {
-      output: targetDirectory,
-    });
+    const process = this.youtubeDl.exec(this.url(), flags);
 
     /* Pipe the YouTube DL process outputs to the parent */
     process.stdout?.pipe(stdout);

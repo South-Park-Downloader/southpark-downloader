@@ -7,10 +7,16 @@ import Episode from '../episode.js';
 import DownloadError from './download-error.js';
 import DownloadResult from './download-result.js';
 import {injectable} from 'inversify';
+import Env from '../../core/env.js';
 
 @injectable()
 export default class Downloader {
-  constructor(private parallel: number = 4) {}
+  constructor(private parallel: number = 4) {
+    /* Disable parallel execution during debugging */
+    if (Env.get('DEBUG') === 'true') {
+      this.parallel = 1;
+    }
+  }
 
   /**
    * Process and download the provided Episodes
