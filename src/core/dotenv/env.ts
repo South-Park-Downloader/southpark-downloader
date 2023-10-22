@@ -1,6 +1,29 @@
 import env from './env-resolver.js';
+import envSchema, {EnvSchema} from './env-schema.js';
 
 export default class Env {
+  /**
+   * This method does validate the environment configuration.
+   * It will check the resolved environment inputs agains the
+   * defined Zod schema.
+   */
+  async validate() {
+    /* Collect the parse promises so we can parse all properties in parallel */
+    const promises = [];
+
+    /* Iterate each environment variable defined in the schema */
+    for (const [key, value] of Object.entries(envSchema)) {
+      /* Push the promise to the stack */
+      promises.push(
+        /* Parse the value from the resolved environment */
+        value.parseAsync(env[key])
+      );
+    }
+
+    /* Wait for all parsing to finish */
+    await Promise.all(promises);
+  }
+
   /**
    * This method retrieves a value from the resolved environment.
    *
@@ -8,43 +31,17 @@ export default class Env {
    * @param fallback The value to return in case the environment variable is not set.
    * @returns any
    */
-  get<K extends keyof EnvDef>(
+  get<K extends keyof EnvSchema>(
     key: K,
-    fallback: EnvDef[K] | null = null
-  ): EnvDef[K] | null {
+    fallback: EnvSchema[K] | null = null
+  ): EnvSchema[K] | null {
     /* Determine if the provided key exists in the resolved environment */
     if (key in env) {
-      /* Return the value from the resolved environment */
-      return env[key];
+      /* Parse the input using the schema */
+      return envSchema[key].parse(env[key])?.valueOf();
     } else {
       /* Use the fallback value in case the key does not exist */
       return fallback;
     }
-  }
-
-  private parse<K extends keyof EnvDef>(key: K): EnvDef[K] | undefined {
-    /* Determine if the provided key exists in the resolved environment */
-    if (key in env) {
-      /* Get the string input value from DotEnv */
-      const input = env[key];
-
-      /* Determine the desired type of the key */
-      //
-
-      /* Try to parse the input */
-    } else {
-      /* Determine if the key is optional */
-      if (true) {
-        /* Return undefined to allow null as value */
-        return undefined;
-      } else {
-        /* Throw an error in case the requested key is not configured and not optional */
-        throw new Error(
-          `Could not parse required environment variable "${key}".`
-        );
-      }
-    }
-
-    /* Return undefined in case the key does not exist */
   }
 }

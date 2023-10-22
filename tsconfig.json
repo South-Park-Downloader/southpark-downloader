@@ -8,12 +8,10 @@
     "lib": ["es2019", "es6", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "strict": true
   },
-  "include": [
-    "src/**/*.ts",
-    "test/**/*.ts"
-  ],
+  "include": ["src/**/*.ts", "test/**/*.ts"],
   "ts-node": {
     "esm": true,
     "files": true
