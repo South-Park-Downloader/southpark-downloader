@@ -1,3 +1,4 @@
+import {z} from 'zod';
 import env from './env-resolver.js';
 import envSchema, {EnvSchema} from './env-schema.js';
 
@@ -27,21 +28,35 @@ export default class Env {
   /**
    * This method retrieves a value from the resolved environment.
    *
-   * @param key The key as defined in EnvDef.
+   * @param key The key as defined in EnvSchema / envSchema.
    * @param fallback The value to return in case the environment variable is not set.
    * @returns any
+   * z.infer<EnvSchema[K]>
    */
   get<K extends keyof EnvSchema>(
     key: K,
-    fallback: EnvSchema[K] | null = null
-  ): EnvSchema[K] | null {
+    fallback: Exclude<z.infer<EnvSchema[K]> | null, undefined> = null
+  ) {
     /* Determine if the provided key exists in the resolved environment */
     if (key in env) {
-      /* Parse the input using the schema */
-      return envSchema[key].parse(env[key])?.valueOf();
-    } else {
-      /* Use the fallback value in case the key does not exist */
-      return fallback;
+      /* Get the schema for the provided environment variable */
+      const schema: EnvSchema[K] = envSchema[key];
+
+      /* Try to parse the environment input using the schema */
+      const parsed = schema.parse(env[key]);
+
+      /* Do not return undefined in case of an optional variable without an default value, use fallback instead */
+      if (parsed !== undefined) {
+        /* Return the parsed / default value */
+        return parsed;
+      }
     }
+
+    /* Use the fallback value to ensure we return anything */
+    return fallback;
+  }
+
+  foo() {
+    const value = this.get('YOUTUBE_DL_BIN'); // => 'string | boolean | null', this should be just 'string | null'
   }
 }

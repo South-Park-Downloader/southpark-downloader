@@ -1,8 +1,10 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
+  "folders": [
+    {
+      "path": "."
+    }
   ],
-  "settings": {}
+  "settings": {
+    "typescript.tsdk": "./node_modules/typescript/lib"
+  }
 }
