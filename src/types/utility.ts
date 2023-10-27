@@ -13,6 +13,10 @@ type ConstantCase<S extends string> = S extends `${infer First}${infer Rest}`
 type test = ConstantCase<'testCase'>;
 type a = test;
 
+type NotEmpty<T extends Array<any>, True = T, False = never> = T extends never[]
+  ? False
+  : True;
+
 /**
  * Utility type similar to Record except that it does provide generic string keys.
  */
@@ -23,7 +27,9 @@ type GenericRecord<T = any> = {
 /**
  * Utility type to decide if T is an GenericRecord and provide a type for each case.
  */
-type IsGenericRecord<T, True, False> = T extends GenericRecord ? True : False;
+type IsGenericRecord<T, True = T, False = never> = T extends GenericRecord
+  ? True
+  : False;
 
 /**
  * Utility type to transform the type of ALL properties of a nested object
@@ -45,11 +51,7 @@ type DotNotations<O extends GenericRecord> = {
   [K in keyof O]: K extends string
     ?
         | DotNotation<`${K}`>
-        | IsGenericRecord<
-            O[K],
-            DotNotation<`${K}.${DotNotations<O[K]>}`>,
-            never
-          >
+        | IsGenericRecord<O[K], DotNotation<`${K}.${DotNotations<O[K]>}`>>
     : never;
 }[keyof O];
 
@@ -67,29 +69,52 @@ type DotValue<O extends GenericRecord, K extends string> = K extends keyof O
 /**
  * Utility type to represent a key array for readablity.
  */
-type KeyNotation<T extends Array<string> = Array<string>> = T;
+type KeyNotation<T extends string[] = string[]> = T;
 
 /**
  * Utility type to determine if T is a KeyNotation.
  */
-type IsKeyNotation<T> = T extends KeyNotation ? T : never;
+type IsKeyNotation<T, True = T, False = never> = T extends string[]
+  ? True
+  : False;
 
 /**
  * Utility type to retrieve all key notations of the provided object.
  */
-type KeyNotations<O extends GenericRecord> = DotToKeyNotation<
-  O,
-  DotNotations<O>
->;
+type KeyNotations<O extends GenericRecord> = {
+  [K in keyof O]: K extends string
+    ?
+        | KeyNotation<[`${K}`]>
+        | IsGenericRecord<O[K], KeyNotation<[`${K}`, ...KeyNotations<O[K]>]>>
+    : never;
+}[keyof O];
+
+const obj = {
+  foo: {
+    bar: {
+      baz: 'test',
+    },
+  },
+  bal: 123,
+};
+
+type abc = KeyNotations<typeof obj>;
 
 /**
  * Utility type to retrieve the value type of a nested object property via key notation.
  */
-type KeyValue<O, K extends KeyNotation> = K extends [infer First, ...infer Rest]
-  ? First extends keyof O
-    ? KeyValue<O[First], IsKeyNotation<Rest>>
+type KeyValue<O, K extends KeyNotation> = NotEmpty<
+  K,
+  K extends [infer First, ...infer Rest]
+    ? First extends keyof O
+      ? NotEmpty<
+          Rest,
+          Rest extends string[] ? KeyValue<O[First], Rest> : never,
+          O[First]
+        >
+      : never
     : never
-  : O;
+>;
 
 /**
  * Utility type to retrieve the key array of the povided "dot.notation" path in the provided object.

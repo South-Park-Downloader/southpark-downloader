@@ -86,29 +86,27 @@ export default class Config {
   private access<O extends GenericRecord, K extends KeyNotations<O>>(
     obj: O,
     keys: K
-  ): KeyValue<O, K> | undefined {
+  ): KeyValue<O, K> {
     /* Ensure that keys have been provided */
     if (keys.length) {
       /* Get and remove the first key */
       const key = keys.shift();
 
-      /* Determine if the object contains the key */
-      if (typeof key === 'string' && key in obj) {
+      /* Ensure that the key maps to a property on the provided object */
+      if (key in obj) {
         /* Get the value for the current key */
         const value = obj[key];
 
-        /* Determine if there are remaining keys */
-        if (keys.length) {
-          /* There are more keys, access the next object */
-          return this.access(value, keys);
-        } else {
-          /* This is the last key, value is the result */
-          return value;
-        }
+        /* There are more keys, access the next object */
+        return this.access(value, keys);
+      } else {
+        throw new Error(
+          `Could not find property for provided config key "${key.toString()}".`
+        );
       }
+    } else {
+      /* No keys are remaining, obj is the result */
+      return obj;
     }
-
-    /* Return undefined in case nothing could be returned */
-    return undefined;
   }
 }
